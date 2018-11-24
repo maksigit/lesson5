@@ -23,14 +23,14 @@ function getId(arr) {
 let button = document.querySelector('.send-task');
 let listOutput = document.querySelector('.list-output');
 let item = JSON.parse(localStorage.getItem('item')) || [];
-let itemLenght = item.length;
+let itemLength = item.length;
 
 function eventRemoveOnButton (e) {
     e.preventDefault();
     let allThrough = document.querySelectorAll('.line-through');
-    let allThoughtLenght = allThrough.length;
+    let allThoughtLength = allThrough.length;
     let attr = [];
-    for (let i = 0; i < allThoughtLenght; i++) {
+    for (let i = 0; i < allThoughtLength; i++) {
         attr.push(allThrough[i].attributes[0].nodeValue);
     }
 
@@ -44,10 +44,12 @@ function eventRemoveOnButton (e) {
     });
 
     item = arrSort;
-    for (let i = 0; i < allThoughtLenght; i++) {
+    for (let i = 0; i < allThoughtLength; i++) {
         allThrough[i].remove()
     }
     setToLoc(item);
+
+    amountItem();
 }
 
 function buttonOn() {
@@ -66,7 +68,7 @@ button.addEventListener('click', function (e) {
         getInputValue = getInput.value;
         let itemObj = {id: getId(item), title: getInputValue,  completed: false};
         item.push(itemObj);
-        itemLenght = item.length;
+        itemLength = item.length;
         getInput.value = "";
         setToLoc(item);
         createLi(itemObj);
@@ -107,6 +109,8 @@ function handleLiOnClick(event)  {
     } else {
         this.className = 'line-through';
     }
+
+    amountItem();
 }
 
 function createLi(val) {
@@ -130,7 +134,7 @@ listOutput.addEventListener('click', function (e) {
     if (e.target.className === 'close') {
         let takeID = e.target.parentElement.getAttribute('data');
         let newArr = [];
-        for (let i = 0; i < itemLenght; i++) {
+        for (let i = 0; i < itemLength; i++) {
             if (item[i].id == takeID) {
                 console.log('ggg');
             } else {
@@ -138,13 +142,29 @@ listOutput.addEventListener('click', function (e) {
             }
         }
         item = newArr;
-        itemLenght = newArr.length;
+        itemLength = newArr.length;
         setToLoc(newArr);
         e.target.parentElement.remove();
+
+        amountItem();
     } else {
         console.log('ggg')
     }
 });
+
+function amountItem() {
+    let count = 0;
+    let amount = document.querySelector('.amount');
+    for(let i = 0; i < item.length; i++) {
+        if (item[i].completed === true) {
+            count++
+        }
+    }
+    amount.innerHTML = count;
+}
+
+amountItem();
+
 
 creatLIFromArray(item);
 
